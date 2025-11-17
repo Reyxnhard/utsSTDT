@@ -1,4 +1,3 @@
-`markdown
 # utsSTDT
 
 Repository ini berisi jawaban UTS dan contoh implementasi PostgreSQL streaming replication dengan Docker Compose.
