@@ -26,7 +26,3 @@ flowchart LR
   InventoryService -->|Event| WarehouseService[Warehouse Service]
   GraphQLServer -->|Response| Client
 `
-                 |                    |                   |
-                 +--------------------+-------------------+
-                                      |
-                       (4. Data aggregated by GraphQL)
