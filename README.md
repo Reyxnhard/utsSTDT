@@ -1,5 +1,7 @@
 # utsSTDT
 
+Muhammad Eza Rayhan (245410087)
+
 ## 1) Teorema CAP dan BASE
 
 **CAP**: Consistency, Availability, Partition tolerance. Teorema CAP menyatakan saat terjadi partition (P), sebuah sistem terdistribusi tidak bisa menjamin konsistensi (C) dan ketersediaan (A) sekaligus — harus memilih trade-off.
