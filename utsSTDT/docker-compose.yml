@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  pg-primary:
+    image: postgres:15
+    container_name: pg-primary
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: mydb
+      REPL_USER: replicator
+      REPL_PASSWORD: replpw
+    volumes:
+      - ./primary/data:/var/lib/postgresql/data
+      - ./primary/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./primary/init-primary.sh:/docker-entrypoint-initdb.d/init-primary.sh:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - pg-net
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+
+  pg-replica:
+    image: postgres:15
+    container_name: pg-replica
+    depends_on:
+      - pg-primary
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
+      REPL_USER: replicator
+      REPL_PASSWORD: replpw
+    volumes:
+      - ./replica/data:/var/lib/postgresql/data
+      - ./replica/init-replica.sh:/docker-entrypoint-initdb.d/init-replica.sh:ro
+    ports:
+      - "5433:5432"
+    networks:
+      - pg-net
+
+networks:
+  pg-net:
+    driver: bridge
