@@ -26,3 +26,17 @@ flowchart LR
   InventoryService -->|Event| WarehouseService[Warehouse Service]
   GraphQLServer -->|Response| Client
 `
+
++-----------------------+
+                |        Client         |
+                +-----------+-----------+
+                            |
+                            v
+                 +------------------------+
+                 |     GraphQL Gateway    |
+                 +--+---------+---------+-+
+                    |         |         |
+                    v         v         v
+        +-----------+--+  +---+-----------+  +----------------+
+        | Auth Service |  | Video Service |  |   User DB     |
+        +--------------+  +---------------+  +----------------+
