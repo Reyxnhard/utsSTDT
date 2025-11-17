@@ -18,6 +18,7 @@ GraphQL bertindak sebagai *orchestrator/gateway* yang menerima satu query dari c
 
 Diagram (mermaid):
 
+```mermaid
 flowchart LR
   Client -->|GraphQL Query| GraphQLServer[GraphQL Server / Gateway]
   GraphQLServer -->|HTTP/gRPC| UserService[User Service]
@@ -27,16 +28,24 @@ flowchart LR
   GraphQLServer -->|Response| Client
 `
 
-+-----------------------+
-                |        Client         |
-                +-----------+-----------+
-                            |
-                            v
-                 +------------------------+
-                 |     GraphQL Gateway    |
-                 +--+---------+---------+-+
-                    |         |         |
-                    v         v         v
-        +-----------+--+  +---+-----------+  +----------------+
-        | Auth Service |  | Video Service |  |   User DB     |
-        +--------------+  +---------------+  +----------------+
++----------+       (1. Single GraphQL Query)       +---------------------+
+|          | -----------------------------------> |                     |
+|  Client  |                                      |  GraphQL API        |
+| (Web/App)|                                      |  Gateway / Server   |
+|          | <----------------------------------- |                     |
++----------+      (5. Single JSON Response)      +---------------------+
+                                                          |
+                                      (2. Resolvers parse query & make IPC calls)
+                                                          |
+                 +--------------------+-------------------+--------------------+
+                 | (IPC: gRPC)        | (IPC: REST)       | (IPC: REST/gRPC)   |
+                 V                    V                   V
+         +---------------+    +---------------+   +----------------+
+         | User Service  |    | Order Service |   | Product Service|
+         +---------------+    +---------------+   +----------------+
+                 | (3. Data)          | (3. Data)         | (3. Data)
+                 |                    |                   |
+                 +--------------------+-------------------+
+                                      |
+                       (4. Data aggregated by GraphQL)
+
